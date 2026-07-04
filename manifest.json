@@ -1,7 +1,7 @@
 {
   "id": "./index.html",
-  "name": "Hebbar Chemical – Quality Calculator",
-  "short_name": "HC Quality",
+  "name": "Hebbar Chemicals",
+  "short_name": "HebbarChemicals",
   "description": "Solid content and quality testing calculator for field executives",
   "start_url": "./index.html",
   "display": "standalone",
