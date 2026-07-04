@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="description" content="Hebbar Chemicals – Quality Testing Calculator for Field Executives">
+  <meta name="theme-color" content="#2563C3">
+  <title>Hebbar Chemicals – Quality Calculator</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="HC Quality">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Splash Screen -->
+  <div id="splash-screen" class="splash-screen">
+    <div class="splash-content">
+      <div class="splash-icon">
+        <svg viewBox="0 0 80 80" fill="none">
+          <circle cx="40" cy="40" r="34" stroke="rgba(255,255,255,0.4)" stroke-width="2" fill="none"/>
+          <text x="40" y="52" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="800" font-size="28" fill="#fff">HC</text>
+        </svg>
+      </div>
+      <h1 class="splash-title">Hebbar Chemicals</h1>
+      <p class="splash-subtitle">Quality Testing</p>
+      <div class="splash-loader">
+        <div class="splash-loader-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app" class="app hidden">
+
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="header-logo">HC</div>
+        <div>
+          <h1 class="header-title">Hebbar Chemicals</h1>
+          <p class="header-subtitle">Quality Testing</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Formula Tabs -->
+    <nav class="formula-nav-wrapper">
+      <button class="nav-arrow nav-arrow-left" id="nav-arrow-left" aria-label="Scroll left">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="formula-nav" id="formula-nav">
+        <button class="formula-tab active" data-formula="solid-content">
+          <span class="tab-num">1</span>
+          <span class="tab-label">Solid Content</span>
+        </button>
+        <button class="formula-tab" data-formula="dilution">
+          <span class="tab-num">2</span>
+          <span class="tab-label">Dilutant Needed</span>
+        </button>
+        <button class="formula-tab" data-formula="flow-rate">
+          <span class="tab-num">3</span>
+          <span class="tab-label">Flow Rate</span>
+        </button>
+        <button class="formula-tab disabled" disabled>
+          <span class="tab-num">4</span>
+          <span class="tab-label">Formula 4</span>
+        </button>
+      </div>
+      <button class="nav-arrow nav-arrow-right" id="nav-arrow-right" aria-label="Scroll right">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </nav>
+
+    <!-- ============================== -->
+    <!-- FORMULA 1: SOLID CONTENT       -->
+    <!-- ============================== -->
+    <main class="calculator-container" id="calc-solid-content">
+
+
+
+      <div class="formula-card">
+        <div class="formula-header">
+          <span class="formula-name">Solid Content %</span>
+        </div>
+        <div class="formula-visual">
+          <div class="formula-fraction">
+            <span class="fraction-top">
+              <span class="fv-label" id="fv-sc-gross">Gross Wt. After Heating</span>
+              <span class="fv-op">−</span>
+              <span class="fv-label" id="fv-sc-tray">Tray Weight</span>
+            </span>
+            <span class="fraction-line"></span>
+            <span class="fraction-bottom">
+              <span class="fv-label" id="fv-sc-sample">Sample Net Weight</span>
+            </span>
+          </div>
+          <span class="formula-times">× 100</span>
+        </div>
+      </div>
+
+      <div class="input-section">
+        <div class="input-group" id="sc-group-tray">
+          <label class="input-label" for="sc-input-tray">
+            <span class="input-step">1</span>
+            <span class="label-text">Tray Weight</span>
+            <span class="label-hint">Weight of the empty tray (grams)</span>
+          </label>
+          <div class="input-wrapper">
+            <input type="number" id="sc-input-tray" class="calc-input" inputmode="decimal" placeholder="e.g. 25.00" step="0.01" min="0" autocomplete="off">
+            <span class="input-unit">grams</span>
+          </div>
+        </div>
+        <div class="input-group" id="sc-group-sample">
+          <label class="input-label" for="sc-input-sample">
+            <span class="input-step">2</span>
+            <span class="label-text">Sample Net Weight</span>
+            <span class="label-hint">Weight of sample taken (grams)</span>
+          </label>
+          <div class="input-wrapper">
+            <input type="number" id="sc-input-sample" class="calc-input" inputmode="decimal" placeholder="e.g. 10.00" step="0.01" min="0" autocomplete="off">
+            <span class="input-unit">grams</span>
+          </div>
+        </div>
+        <div class="input-group" id="sc-group-gross">
+          <label class="input-label" for="sc-input-gross">
+            <span class="input-step">3</span>
+            <span class="label-text">Gross Wt. After Heating</span>
+            <span class="label-hint">Tray + sample weight after heating (grams)</span>
+          </label>
+          <div class="input-wrapper">
+            <input type="number" id="sc-input-gross" class="calc-input" inputmode="decimal" placeholder="e.g. 29.50" step="0.01" min="0" autocomplete="off">
+            <span class="input-unit">grams</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-calculate" id="sc-btn-calc" disabled>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/>
+          <line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/>
+        </svg>
+        <span>Calculate Solid Content</span>
+      </button>
+
+      <div class="result-card hidden" id="sc-result">
+        <div class="result-header">
+          <span class="result-title">Result</span>
+          <span class="result-timestamp" id="sc-result-ts"></span>
+        </div>
+        <div class="result-value-wrapper">
+          <span class="result-value" id="sc-result-val">0.00</span>
+          <span class="result-percent">%</span>
+        </div>
+        <div class="result-label">Solid Content</div>
+        <div class="result-breakdown">
+          <div class="breakdown-row">
+            <span class="breakdown-label">Tray Weight</span>
+            <span class="breakdown-value" id="sc-bd-tray">—</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-label">Sample Net Weight</span>
+            <span class="breakdown-value" id="sc-bd-sample">—</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-label">Gross Wt. After Heating</span>
+            <span class="breakdown-value" id="sc-bd-gross">—</span>
+          </div>
+          <div class="breakdown-divider"></div>
+          <div class="breakdown-row highlight">
+            <span class="breakdown-label">Solid Residue (Gross − Tray)</span>
+            <span class="breakdown-value" id="sc-bd-residue">—</span>
+          </div>
+        </div>
+        <div class="result-actions">
+          <button class="btn-action btn-reset" id="sc-btn-reset">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+            </svg>
+            New Test
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- ============================== -->
+    <!-- FORMULA 2: DILUTION            -->
+    <!-- ============================== -->
+    <main class="calculator-container hidden" id="calc-dilution">
+
+
+
+      <div class="formula-card">
+        <div class="formula-header">
+          <span class="formula-name">Dilutant Needed</span>
+        </div>
+        <div class="formula-visual">
+          <div class="formula-fraction">
+            <span class="fraction-top">
+              <span class="fv-label" id="fv-dil-psp">Present Solid %</span>
+              <span class="fv-op">×</span>
+              <span class="fv-label" id="fv-dil-ptw">Batch Weight</span>
+            </span>
+            <span class="fraction-line"></span>
+            <span class="fraction-bottom">
+              <span class="fv-label" id="fv-dil-esp">Expected Solid %</span>
+            </span>
+          </div>
+          <span class="formula-op-label">− Batch Wt. = Dilutant to Add</span>
+        </div>
+      </div>
+
+      <div class="input-section">
+        <div class="input-group" id="dil-group-psp">
+          <label class="input-label" for="dil-input-psp">
+            <span class="input-step">1</span>
+            <span class="label-text">Present Solid %</span>
+            <span class="label-hint">Current solid percentage of the batch</span>
+          </label>
+          <div class="input-wrapper">
+            <input type="number" id="dil-input-psp" class="calc-input" inputmode="decimal" placeholder="e.g. 45" step="0.01" min="0" max="100" autocomplete="off">
+            <span class="input-unit">%</span>
+          </div>
+        </div>
+        <div class="input-group" id="dil-group-ptw">
+          <label class="input-label" for="dil-input-ptw">
+            <span class="input-step">2</span>
+            <span class="label-text">Present Batch Weight</span>
+            <span class="label-hint">Current total weight of the batch</span>
+          </label>
+          <div class="input-wrapper">
+            <input type="number" id="dil-input-ptw" class="calc-input" inputmode="decimal" placeholder="e.g. 500" step="0.01" min="0" autocomplete="off">
+            <span class="input-unit">kg</span>
+          </div>
+        </div>
+        <div class="input-group" id="dil-group-esp">
+          <label class="input-label" for="dil-input-esp">
+            <span class="input-step">3</span>
+            <span class="label-text">Expected Solid %</span>
+            <span class="label-hint">Desired solid percentage after adding water</span>
+          </label>
+          <div class="input-wrapper">
+            <input type="number" id="dil-input-esp" class="calc-input" inputmode="decimal" placeholder="e.g. 30" step="0.01" min="0" max="100" autocomplete="off">
+            <span class="input-unit">%</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-calculate" id="dil-btn-calc" disabled>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v6l-2 2"/><circle cx="12" cy="18" r="4"/><path d="M12 14v-2"/>
+        </svg>
+        <span>Calculate Dilutant Needed</span>
+      </button>
+
+      <!-- Big Worker-Friendly Result -->
+      <div class="result-card hidden" id="dil-result">
+        <div class="result-header">
+          <span class="result-title">Result</span>
+          <span class="result-timestamp" id="dil-result-ts"></span>
+        </div>
+
+        <div class="result-hero">
+          <div class="result-hero-icon">💧</div>
+          <div class="result-hero-text">Add</div>
+          <div class="result-hero-value" id="dil-result-val">0.00</div>
+          <div class="result-hero-unit">kg</div>
+          <div class="result-hero-sub">of dilutant to the batch</div>
+        </div>
+
+        <div class="result-breakdown">
+          <div class="breakdown-row">
+            <span class="breakdown-label">Present Solid %</span>
+            <span class="breakdown-value" id="dil-bd-psp">—</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-label">Present Batch Weight</span>
+            <span class="breakdown-value" id="dil-bd-ptw">—</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-label">Expected Solid %</span>
+            <span class="breakdown-value" id="dil-bd-esp">—</span>
+          </div>
+          <div class="breakdown-divider"></div>
+          <div class="breakdown-row">
+            <span class="breakdown-label">New Total Weight</span>
+            <span class="breakdown-value" id="dil-bd-ntw">—</span>
+          </div>
+          <div class="breakdown-row highlight">
+            <span class="breakdown-label">Dilutant to Add</span>
+            <span class="breakdown-value" id="dil-bd-water">—</span>
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <button class="btn-action btn-reset" id="dil-btn-reset">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+            </svg>
+            New Test
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- ============================== -->
+    <!-- FORMULA 3: FLOW RATE           -->
+    <!-- ============================== -->
+    <main class="calculator-container hidden" id="calc-flow-rate">
+
+
+
+      <div class="formula-card">
+        <div class="formula-header">
+          <span class="formula-name">Flow Rate</span>
+        </div>
+        <div class="formula-visual">
+          <div class="formula-fraction">
+            <span class="fraction-top">
+              <span class="fv-label" id="fv-fr-qty">Total Qty (kg)</span>
+              <span class="fv-op">÷</span>
+              <span class="fv-label" id="fv-fr-sg">Specific Gravity</span>
+              <span class="fv-op">× 1000</span>
+            </span>
+            <span class="fraction-line"></span>
+            <span class="fraction-bottom">
+              <span class="fv-label" id="fv-fr-time">Total Time (seconds)</span>
+            </span>
+          </div>
+          <span class="formula-op-label">= ml / s</span>
+        </div>
+      </div>
+
+      <div class="input-section">
+        <!-- Step 1: Total Quantity -->
+        <div class="input-group" id="fr-group-qty">
+          <label class="input-label" for="fr-input-qty">
+            <span class="input-step">1</span>
+            <span class="label-text">Total Quantity</span>
+            <span class="label-hint">Total weight of material (kg)</span>
+          </label>
+          <div class="input-wrapper">
+            <input type="number" id="fr-input-qty" class="calc-input" inputmode="decimal" placeholder="e.g. 100" step="0.01" min="0" autocomplete="off">
+            <span class="input-unit">kg</span>
+          </div>
+        </div>
+
+        <!-- Step 2: Total Time -->
+        <div class="input-group" id="fr-group-time">
+          <label class="input-label" for="fr-input-hh">
+            <span class="input-step">2</span>
+            <span class="label-text">Total Time Taken</span>
+            <span class="label-hint">Hours, Minutes, Seconds</span>
+          </label>
+          <div class="time-input-row">
+            <div class="time-field">
+              <input type="number" id="fr-input-hh" class="calc-input time-input" inputmode="numeric" placeholder="0" min="0" max="99" autocomplete="off">
+              <span class="time-label">hrs</span>
+            </div>
+            <span class="time-sep">:</span>
+            <div class="time-field">
+              <input type="number" id="fr-input-mm" class="calc-input time-input" inputmode="numeric" placeholder="0" min="0" max="59" autocomplete="off">
+              <span class="time-label">min</span>
+            </div>
+            <span class="time-sep">:</span>
+            <div class="time-field">
+              <input type="number" id="fr-input-ss" class="calc-input time-input" inputmode="numeric" placeholder="0" min="0" max="59" autocomplete="off">
+              <span class="time-label">sec <span style="opacity:0.5;font-size:0.55rem">(optional)</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Specific Gravity -->
+        <div class="input-group" id="fr-group-sg">
+          <label class="input-label" for="fr-input-sg">
+            <span class="input-step">3</span>
+            <span class="label-text">Specific Gravity</span>
+            <span class="label-hint">Density relative to water (e.g. 1.05)</span>
+          </label>
+          <div class="input-wrapper">
+            <input type="number" id="fr-input-sg" class="calc-input" inputmode="decimal" placeholder="e.g. 1.05" step="0.001" min="0" autocomplete="off">
+            <span class="input-unit">—</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-calculate" id="fr-btn-calc" disabled>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span>Calculate Flow Rate</span>
+      </button>
+
+      <!-- Result -->
+      <div class="result-card hidden" id="fr-result">
+        <div class="result-header">
+          <span class="result-title">Result</span>
+          <span class="result-timestamp" id="fr-result-ts"></span>
+        </div>
+
+
+        <!-- Interval Grid -->
+        <div class="interval-grid">
+          <div class="interval-title">Material flow at standard intervals</div>
+          <div class="interval-row">
+            <span class="interval-time">10 sec</span>
+            <span class="interval-arrow">→</span>
+            <span class="interval-value" id="fr-iv-10">—</span>
+          </div>
+          <div class="interval-row">
+            <span class="interval-time">15 sec</span>
+            <span class="interval-arrow">→</span>
+            <span class="interval-value" id="fr-iv-15">—</span>
+          </div>
+          <div class="interval-row">
+            <span class="interval-time">20 sec</span>
+            <span class="interval-arrow">→</span>
+            <span class="interval-value" id="fr-iv-20">—</span>
+          </div>
+          <div class="interval-row">
+            <span class="interval-time">25 sec</span>
+            <span class="interval-arrow">→</span>
+            <span class="interval-value" id="fr-iv-25">—</span>
+          </div>
+          <div class="interval-row">
+            <span class="interval-time">30 sec</span>
+            <span class="interval-arrow">→</span>
+            <span class="interval-value" id="fr-iv-30">—</span>
+          </div>
+        </div>
+
+        <div class="result-breakdown">
+          <div class="breakdown-row">
+            <span class="breakdown-label">Total Quantity</span>
+            <span class="breakdown-value" id="fr-bd-qty">—</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-label">Total Time</span>
+            <span class="breakdown-value" id="fr-bd-time">—</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-label">Specific Gravity</span>
+            <span class="breakdown-value" id="fr-bd-sg">—</span>
+          </div>
+          <div class="breakdown-divider"></div>
+          <div class="breakdown-row">
+            <span class="breakdown-label">Total Volume</span>
+            <span class="breakdown-value" id="fr-bd-vol">—</span>
+          </div>
+          <div class="breakdown-row highlight">
+            <span class="breakdown-label">Flow Rate</span>
+            <span class="breakdown-value" id="fr-bd-rate">—</span>
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <button class="btn-action btn-reset" id="fr-btn-reset">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+            </svg>
+            New Test
+          </button>
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Toast -->
+  <div class="toast hidden" id="toast">
+    <span class="toast-text" id="toast-text">Done!</span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

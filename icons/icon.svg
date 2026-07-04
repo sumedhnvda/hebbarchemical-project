@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6C63FF"/>
+      <stop offset="100%" stop-color="#3DD9D6"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="#0f0f1a"/>
+  <circle cx="256" cy="256" r="180" stroke="url(#g)" stroke-width="12" fill="none"/>
+  <text x="256" y="280" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="160" fill="url(#g)">HC</text>
+</svg>
