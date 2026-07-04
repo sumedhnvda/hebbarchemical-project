@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hebbar-chem-v1';
+const CACHE_NAME = 'hebbar-chem-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -27,10 +27,21 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// Network-First Strategy: Always fetch fresh content from server when online, update cache, and fallback to cache if offline.
 self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
+    fetch(event.request)
+      .then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+        return networkResponse;
+      })
+      .catch(() => caches.match(event.request))
   );
 });
