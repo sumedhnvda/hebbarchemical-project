@@ -388,6 +388,9 @@ function setLanguage(lang) {
           if(!btn.disabled) btn.click();
       });
   }
+  
+  // Persist language choice
+  localStorage.setItem('hc_lang', lang);
 }
 
 function t(key) {
@@ -395,4 +398,18 @@ function t(key) {
     return translations[currentLang][key];
   }
   return key;
+}
+
+// Load saved language on startup
+function initLang() {
+  const savedLang = localStorage.getItem('hc_lang') || 'en';
+  if (savedLang !== 'en') {
+    setLanguage(savedLang);
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initLang);
+} else {
+  initLang();
 }
