@@ -42,9 +42,15 @@
           <img src="icons/header-logo.png" alt="HC Logo" class="header-logo-img">
         </div>
         <div>
-          <h1 class="header-title">Hebbar Chemicals</h1>
-          <p class="header-subtitle">Quality Testing</p>
+          <h1 class="header-title" data-i18n="Hebbar Chemicals">Hebbar Chemicals</h1>
+          <p class="header-subtitle" data-i18n="Quality Testing">Quality Testing</p>
         </div>
+      </div>
+      <div class="header-right">
+        <button class="lang-btn active" data-lang="en" onclick="setLanguage('en')">EN</button>
+        <button class="lang-btn" data-lang="hi" onclick="setLanguage('hi')">HI</button>
+        <button class="lang-btn" data-lang="mr" onclick="setLanguage('mr')">MR</button>
+        <button class="lang-btn" data-lang="ta" onclick="setLanguage('ta')">TA</button>
       </div>
     </header>
 
@@ -836,6 +842,7 @@
     <span class="toast-text" id="toast-text">Done!</span>
   </div>
 
+  <script src="translations.js?v=2"></script>
   <script src="app.js"></script>
 </body>
 </html>

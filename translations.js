@@ -1,0 +1,398 @@
+const translations = {
+  "en": {}, // Default is what's in HTML
+  "hi": {
+    "Hebbar Chemicals": "हेब्बार केमिकल्स",
+    "Quality Testing": "गुणवत्ता परीक्षण",
+    "Solid Content": "ठोस सामग्री",
+    "Dilutant Needed": "आवश्यक पतला करने वाला पदार्थ",
+    "Flow Rate": "प्रवाह दर",
+    "Blending": "मिश्रण",
+    "Mixed Packing": "मिश्रित पैकिंग",
+    "Filling Time": "भरने का समय",
+    "Solid Content %": "ठोस सामग्री %",
+    "Tray Weight": "ट्रे का वजन",
+    "Sample Net Weight": "नमूने का शुद्ध वजन",
+    "Gross Wt. After Heating": "गर्म करने के बाद कुल वजन",
+    "Solid Residue (Gross − Tray)": "ठोस अवशेष (कुल − ट्रे)",
+    "Weight of the empty tray (grams)": "खाली ट्रे का वजन (ग्राम)",
+    "Weight of sample taken (grams)": "लिए गए नमूने का वजन (ग्राम)",
+    "Tray + sample weight after heating (grams)": "गर्म करने के बाद ट्रे + नमूने का वजन (ग्राम)",
+    "Calculate Solid Content": "ठोस सामग्री की गणना करें",
+    "Result": "परिणाम",
+    "New Test": "नया परीक्षण",
+    "grams": "ग्राम",
+    "kg": "किग्रा",
+    "sec": "सेकंड",
+    "min": "मिनट",
+    "hr": "घंटे",
+    "hrs": "घंटे",
+    "L": "लीटर",
+    "LPM": "LPM",
+    "LPH": "LPH",
+    "Present Solid %": "वर्तमान ठोस %",
+    "Present Batch Weight": "वर्तमान बैच का वजन",
+    "Expected Solid %": "अपेक्षित ठोस %",
+    "Current solid percentage of the batch": "बैच का वर्तमान ठोस प्रतिशत",
+    "Current total weight of the batch": "बैच का वर्तमान कुल वजन",
+    "Desired solid percentage after adding water": "पानी मिलाने के बाद वांछित ठोस प्रतिशत",
+    "Calculate Dilutant Needed": "आवश्यक पदार्थ की गणना करें",
+    "Add": "मिलाएं",
+    "of dilutant to the batch": "पतला करने वाला पदार्थ बैच में",
+    "New Total Weight": "नया कुल वजन",
+    "Dilutant to Add": "मिलाने वाला पदार्थ",
+    "Total Quantity": "कुल मात्रा",
+    "Total Time Taken": "लिया गया कुल समय",
+    "Specific Gravity": "विशिष्ट गुरुत्व",
+    "Total weight of material (kg)": "सामग्री का कुल वजन (किग्रा)",
+    "Hours, Minutes, Seconds": "घंटे, मिनट, सेकंड",
+    "Density relative to water (e.g. 1.05)": "पानी के सापेक्ष घनत्व",
+    "Calculate Flow Rate": "प्रवाह दर की गणना करें",
+    "Material flow at standard intervals": "मानक अंतराल पर सामग्री प्रवाह",
+    "Total Volume": "कुल आयतन",
+    "Flow Rate (per minute)": "प्रवाह दर (प्रति मिनट)",
+    "Flow Rate (per hour)": "प्रवाह दर (प्रति घंटे)",
+    "Chemical Blending": "रासायनिक मिश्रण",
+    "Chem 1 %": "रसायन 1 %",
+    "Chem 2 %": "रसायन 2 %",
+    "Mix %": "मिश्रण %",
+    "Chemical 1 %": "रसायन 1 %",
+    "Chemical 2 %": "रसायन 2 %",
+    "Desired Mixture %": "वांछित मिश्रण %",
+    "Percentage of the first chemical": "पहले रसायन का प्रतिशत",
+    "Percentage of the second chemical": "दूसरे रसायन का प्रतिशत",
+    "Target percentage for the mixture": "मिश्रण के लिए लक्षित प्रतिशत",
+    "Calculate Mixing Ratio": "मिश्रण अनुपात की गणना करें",
+    "For every 1 kg of Chemical 1, add:": "रसायन 1 के प्रत्येक 1 किग्रा के लिए, मिलाएं:",
+    "For every 1 kg of Chemical 2, add:": "रसायन 2 के प्रत्येक 1 किग्रा के लिए, मिलाएं:",
+    "Mixed Packing Quantity": "मिश्रित पैकिंग मात्रा",
+    "Packing Qty": "पैकिंग मात्रा",
+    "Packing Quantity": "पैकिंग मात्रा",
+    "Total batch size needed": "आवश्यक कुल बैच आकार",
+    "Calculate Packing Qty": "पैकिंग मात्रा की गणना करें",
+    "Chemical 1 — Add:": "रसायन 1 — मिलाएं:",
+    "Chemical 2 — Add:": "रसायन 2 — मिलाएं:",
+    "Sample Time": "नमूना समय",
+    "Sample Quantity": "नमूना मात्रा",
+    "Total Weight": "कुल वजन",
+    "Time taken to fill the sample (minutes)": "नमूना भरने में लगने वाला समय (मिनट)",
+    "Weight filled during sample time": "नमूना समय के दौरान भरा गया वजन",
+    "Total quantity that needs to be filled": "भरी जाने वाली कुल मात्रा",
+    "Calculate Filling Time": "भरने के समय की गणना करें",
+    "Estimated Filling Time": "अनुमानित भरने का समय",
+    "Total Minutes": "कुल मिनट",
+    "Total Qty (kg)": "कुल मात्रा (किग्रा)",
+    "= Chem 1 qty (kg)": "= रसायन 1 मात्रा (किग्रा)",
+    "= Ratio": "= अनुपात",
+    "= Flow Rate (LPM, LPH)": "= प्रवाह दर (LPM, LPH)",
+    "− Batch Wt. = Dilutant to Add": "− बैच वजन = मिलाने वाला पदार्थ",
+    "= Total Time (min)": "= कुल समय (मिनट)",
+    "1 minute": "1 मिनट", "5 minutes": "5 मिनट", "10 minutes": "10 मिनट", "30 minutes": "30 मिनट", "1 hour": "1 घंटा",
+    "10 sec": "10 सेकंड", "15 sec": "15 सेकंड", "20 sec": "20 सेकंड", "25 sec": "25 सेकंड", "30 sec": "30 सेकंड",
+    "Please enter valid values": "कृपया मान्य मूल्य दर्ज करें",
+    "Desired mixture must be between Chemical 1 and 2": "वांछित मिश्रण रसायन 1 और 2 के बीच होना चाहिए",
+    "Chemical percentages must be different": "रासायनिक प्रतिशत अलग-अलग होने चाहिए",
+    "kg of Chemical 1": "किग्रा रसायन 1",
+    "kg of Chemical 2": "किग्रा रसायन 2",
+    "Only Chemical 1 needed": "केवल रसायन 1 की आवश्यकता है",
+    "Only Chemical 2 needed": "केवल रसायन 2 की आवश्यकता है",
+    "Less than a minute to complete filling.": "भरने में एक मिनट से भी कम समय लगेगा।",
+    "hour": "घंटा", "hours": "घंटे", "minute": "मिनट", "minutes": "मिनट",
+    "It will take approximately": "इसमें लगभग",
+    "and": "और",
+    "to complete filling.": "भरने में लगेंगे।",
+    "e.g. 25.00": "उदा. 25.00", "e.g. 10.00": "उदा. 10.00", "e.g. 29.50": "उदा. 29.50",
+    "e.g. 45": "उदा. 45", "e.g. 500": "उदा. 500", "e.g. 30": "उदा. 30",
+    "e.g. 100": "उदा. 100", "e.g. 1.05": "उदा. 1.05", "e.g. 60": "उदा. 60", "e.g. 20": "उदा. 20",
+    "e.g. 40": "उदा. 40", "e.g. 0.5": "उदा. 0.5", "e.g. 5": "उदा. 5",
+    "Batch Weight": "बैच का वजन",
+    "Total Time (seconds)": "कुल समय (सेकंड)"
+  },
+  "mr": {
+    "Hebbar Chemicals": "हेब्बार केमिकल्स",
+    "Quality Testing": "गुणवत्ता चाचणी",
+    "Solid Content": "घन सामग्री",
+    "Dilutant Needed": "आवश्यक पातळ पदार्थ",
+    "Flow Rate": "प्रवाह दर",
+    "Blending": "मिश्रण",
+    "Mixed Packing": "मिश्रित पॅकिंग",
+    "Filling Time": "भरण्याची वेळ",
+    "Solid Content %": "घन सामग्री %",
+    "Tray Weight": "ट्रेचे वजन",
+    "Sample Net Weight": "नमुन्याचे निव्वळ वजन",
+    "Gross Wt. After Heating": "गरम केल्यानंतर एकूण वजन",
+    "Solid Residue (Gross − Tray)": "घन अवशेष (एकूण − ट्रे)",
+    "Weight of the empty tray (grams)": "रिकाम्या ट्रेचे वजन (ग्रॅम)",
+    "Weight of sample taken (grams)": "घेतलेल्या नमुन्याचे वजन (ग्रॅम)",
+    "Tray + sample weight after heating (grams)": "गरम केल्यानंतर ट्रे + नमुन्याचे वजन (ग्रॅम)",
+    "Calculate Solid Content": "घन सामग्रीची गणना करा",
+    "Result": "निकाल",
+    "New Test": "नवीन चाचणी",
+    "grams": "ग्रॅम",
+    "kg": "किग्रॅ",
+    "sec": "सेकंद",
+    "min": "मिनिट",
+    "hr": "तास",
+    "hrs": "तास",
+    "L": "लिटर",
+    "LPM": "LPM",
+    "LPH": "LPH",
+    "Present Solid %": "सध्याचे घन %",
+    "Present Batch Weight": "सध्याचे बॅचचे वजन",
+    "Expected Solid %": "अपेक्षित घन %",
+    "Current solid percentage of the batch": "बॅचची सध्याची घन टक्केवारी",
+    "Current total weight of the batch": "बॅचचे सध्याचे एकूण वजन",
+    "Desired solid percentage after adding water": "पाणी घातल्यानंतर इच्छित घन टक्केवारी",
+    "Calculate Dilutant Needed": "आवश्यक पदार्थाची गणना करा",
+    "Add": "मिळवा",
+    "of dilutant to the batch": "पातळ पदार्थ बॅचमध्ये",
+    "New Total Weight": "नवीन एकूण वजन",
+    "Dilutant to Add": "मिळवायचा पदार्थ",
+    "Total Quantity": "एकूण प्रमाण",
+    "Total Time Taken": "लागलेला एकूण वेळ",
+    "Specific Gravity": "विशिष्ट गुरुत्व",
+    "Total weight of material (kg)": "सामग्रीचे एकूण वजन (किग्रॅ)",
+    "Hours, Minutes, Seconds": "तास, मिनिटे, सेकंद",
+    "Density relative to water (e.g. 1.05)": "पाण्याच्या तुलनेत घनता",
+    "Calculate Flow Rate": "प्रवाह दराची गणना करा",
+    "Material flow at standard intervals": "प्रमाणित अंतराने सामग्रीचा प्रवाह",
+    "Total Volume": "एकूण आकारमान",
+    "Flow Rate (per minute)": "प्रवाह दर (प्रति मिनिट)",
+    "Flow Rate (per hour)": "प्रवाह दर (प्रति तास)",
+    "Chemical Blending": "रासायनिक मिश्रण",
+    "Chem 1 %": "रसायन 1 %",
+    "Chem 2 %": "रसायन 2 %",
+    "Mix %": "मिश्रण %",
+    "Chemical 1 %": "रसायन 1 %",
+    "Chemical 2 %": "रसायन 2 %",
+    "Desired Mixture %": "इच्छित मिश्रण %",
+    "Percentage of the first chemical": "पहिल्या रसायनाची टक्केवारी",
+    "Percentage of the second chemical": "दुसऱ्या रसायनाची टक्केवारी",
+    "Target percentage for the mixture": "मिश्रणासाठी लक्षित टक्केवारी",
+    "Calculate Mixing Ratio": "मिश्रण गुणोत्तराची गणना करा",
+    "For every 1 kg of Chemical 1, add:": "रसायन 1 च्या प्रत्येक 1 किग्रॅ साठी, मिळवा:",
+    "For every 1 kg of Chemical 2, add:": "रसायन 2 च्या प्रत्येक 1 किग्रॅ साठी, मिळवा:",
+    "Mixed Packing Quantity": "मिश्रित पॅकिंग प्रमाण",
+    "Packing Qty": "पॅकिंग प्रमाण",
+    "Packing Quantity": "पॅकिंग प्रमाण",
+    "Total batch size needed": "आवश्यक एकूण बॅचचा आकार",
+    "Calculate Packing Qty": "पॅकिंग प्रमाणाची गणना करा",
+    "Chemical 1 — Add:": "रसायन 1 — मिळवा:",
+    "Chemical 2 — Add:": "रसायन 2 — मिळवा:",
+    "Sample Time": "नमुना वेळ",
+    "Sample Quantity": "नमुना प्रमाण",
+    "Total Weight": "एकूण वजन",
+    "Time taken to fill the sample (minutes)": "नमुना भरण्यासाठी लागणारा वेळ (मिनिटे)",
+    "Weight filled during sample time": "नमुना वेळेत भरलेले वजन",
+    "Total quantity that needs to be filled": "भरायचे एकूण प्रमाण",
+    "Calculate Filling Time": "भरण्याच्या वेळेची गणना करा",
+    "Estimated Filling Time": "अंदाजित भरण्याची वेळ",
+    "Total Minutes": "एकूण मिनिटे",
+    "Total Qty (kg)": "एकूण प्रमाण (किग्रॅ)",
+    "= Chem 1 qty (kg)": "= रसायन 1 प्रमाण (किग्रॅ)",
+    "= Ratio": "= गुणोत्तर",
+    "= Flow Rate (LPM, LPH)": "= प्रवाह दर (LPM, LPH)",
+    "− Batch Wt. = Dilutant to Add": "− बॅच वजन = मिळवायचा पदार्थ",
+    "= Total Time (min)": "= एकूण वेळ (मिनिटे)",
+    "1 minute": "1 मिनिट", "5 minutes": "5 मिनिटे", "10 minutes": "10 मिनिटे", "30 minutes": "30 मिनिटे", "1 hour": "1 तास",
+    "10 sec": "10 सेकंद", "15 sec": "15 सेकंद", "20 sec": "20 सेकंद", "25 sec": "25 सेकंद", "30 sec": "30 सेकंद",
+    "Please enter valid values": "कृपया योग्य मूल्य प्रविष्ट करा",
+    "Desired mixture must be between Chemical 1 and 2": "इच्छित मिश्रण रसायन 1 आणि 2 च्या दरम्यान असणे आवश्यक आहे",
+    "Chemical percentages must be different": "रासायनिक टक्केवारी भिन्न असणे आवश्यक आहे",
+    "kg of Chemical 1": "किग्रॅ रसायन 1",
+    "kg of Chemical 2": "किग्रॅ रसायन 2",
+    "Only Chemical 1 needed": "केवळ रसायन 1 आवश्यक आहे",
+    "Only Chemical 2 needed": "केवळ रसायन 2 आवश्यक आहे",
+    "Less than a minute to complete filling.": "भरण्यासाठी एक मिनिटापेक्षा कमी वेळ लागेल.",
+    "hour": "तास", "hours": "तास", "minute": "मिनिट", "minutes": "मिनिटे",
+    "It will take approximately": "यास अंदाजे",
+    "and": "आणि",
+    "to complete filling.": "लागेल.",
+    "e.g. 25.00": "उदा. 25.00", "e.g. 10.00": "उदा. 10.00", "e.g. 29.50": "उदा. 29.50",
+    "e.g. 45": "उदा. 45", "e.g. 500": "उदा. 500", "e.g. 30": "उदा. 30",
+    "e.g. 100": "उदा. 100", "e.g. 1.05": "उदा. 1.05", "e.g. 60": "उदा. 60", "e.g. 20": "उदा. 20",
+    "e.g. 40": "उदा. 40", "e.g. 0.5": "उदा. 0.5", "e.g. 5": "उदा. 5",
+    "Batch Weight": "बॅचचे वजन",
+    "Total Time (seconds)": "एकूण वेळ (सेकंद)"
+  },
+  "ta": {
+    "Hebbar Chemicals": "ஹெப்பார் கெமிக்கல்ஸ்",
+    "Quality Testing": "தர சோதனை",
+    "Solid Content": "திடப்பொருள் உள்ளடக்கம்",
+    "Dilutant Needed": "தேவையான நீர்க்கும் பொருள்",
+    "Flow Rate": "ஓட்ட விகிதம்",
+    "Blending": "கலவை",
+    "Mixed Packing": "கலப்பு பேக்கிங்",
+    "Filling Time": "நிரப்பும் நேரம்",
+    "Solid Content %": "திடப்பொருள் உள்ளடக்கம் %",
+    "Tray Weight": "தட்டு எடை",
+    "Sample Net Weight": "மாதிரியின் நிகர எடை",
+    "Gross Wt. After Heating": "சூடாக்கிய பின் மொத்த எடை",
+    "Solid Residue (Gross − Tray)": "திட மீதி (மொத்தம் − தட்டு)",
+    "Weight of the empty tray (grams)": "காலி தட்டின் எடை (கிராம்)",
+    "Weight of sample taken (grams)": "எடுக்கப்பட்ட மாதிரியின் எடை (கிராம்)",
+    "Tray + sample weight after heating (grams)": "சூடாக்கிய பின் தட்டு + மாதிரி எடை (கிராம்)",
+    "Calculate Solid Content": "திட உள்ளடக்கத்தை கணக்கிடு",
+    "Result": "முடிவு",
+    "New Test": "புதிய சோதனை",
+    "grams": "கிராம்",
+    "kg": "கிலோ",
+    "sec": "நொடி",
+    "min": "நிமிடம்",
+    "hr": "மணி",
+    "hrs": "மணி",
+    "L": "லிட்டர்",
+    "LPM": "LPM",
+    "LPH": "LPH",
+    "Present Solid %": "தற்போதைய திட %",
+    "Present Batch Weight": "தற்போதைய பேட்ச் எடை",
+    "Expected Solid %": "எதிர்பார்க்கப்படும் திட %",
+    "Current solid percentage of the batch": "பேட்ச்சின் தற்போதைய திடப்பொருள் சதவீதம்",
+    "Current total weight of the batch": "பேட்ச்சின் தற்போதைய மொத்த எடை",
+    "Desired solid percentage after adding water": "நீர் சேர்த்த பின் விரும்பிய திடப்பொருள் சதவீதம்",
+    "Calculate Dilutant Needed": "தேவையான பொருளைக் கணக்கிடு",
+    "Add": "சேர்க்கவும்",
+    "of dilutant to the batch": "நீர்க்கும் பொருள் பேட்ச்சில்",
+    "New Total Weight": "புதிய மொத்த எடை",
+    "Dilutant to Add": "சேர்க்க வேண்டிய பொருள்",
+    "Total Quantity": "மொத்த அளவு",
+    "Total Time Taken": "எடுத்துக்கொண்ட மொத்த நேரம்",
+    "Specific Gravity": "குறிப்பிட்ட ஈர்ப்பு",
+    "Total weight of material (kg)": "பொருளின் மொத்த எடை (கிலோ)",
+    "Hours, Minutes, Seconds": "மணி, நிமிடம், வினாடிகள்",
+    "Density relative to water (e.g. 1.05)": "நீருடன் ஒப்பிடும்போது அடர்த்தி",
+    "Calculate Flow Rate": "ஓட்ட விகிதத்தை கணக்கிடு",
+    "Material flow at standard intervals": "நிலையான இடைவெளிகளில் பொருள் ஓட்டம்",
+    "Total Volume": "மொத்த கன அளவு",
+    "Flow Rate (per minute)": "ஓட்ட விகிதம் (நிமிடத்திற்கு)",
+    "Flow Rate (per hour)": "ஓட்ட விகிதம் (மணிக்கு)",
+    "Chemical Blending": "இரசாயன கலவை",
+    "Chem 1 %": "இரசாயனம் 1 %",
+    "Chem 2 %": "இரசாயனம் 2 %",
+    "Mix %": "கலவை %",
+    "Chemical 1 %": "இரசாயனம் 1 %",
+    "Chemical 2 %": "இரசாயனம் 2 %",
+    "Desired Mixture %": "விரும்பிய கலவை %",
+    "Percentage of the first chemical": "முதல் இரசாயனத்தின் சதவீதம்",
+    "Percentage of the second chemical": "இரண்டாவது இரசாயனத்தின் சதவீதம்",
+    "Target percentage for the mixture": "கலவைக்கான இலக்கு சதவீதம்",
+    "Calculate Mixing Ratio": "கலவை விகிதத்தை கணக்கிடு",
+    "For every 1 kg of Chemical 1, add:": "இரசாயனம் 1-ன் ஒவ்வொரு 1 கிலோவுக்கும், சேர்க்கவும்:",
+    "For every 1 kg of Chemical 2, add:": "இரசாயனம் 2-ன் ஒவ்வொரு 1 கிலோவுக்கும், சேர்க்கவும்:",
+    "Mixed Packing Quantity": "கலப்பு பேக்கிங் அளவு",
+    "Packing Qty": "பேக்கிங் அளவு",
+    "Packing Quantity": "பேக்கிங் அளவு",
+    "Total batch size needed": "தேவையான மொத்த பேட்ச் அளவு",
+    "Calculate Packing Qty": "பேக்கிங் அளவை கணக்கிடு",
+    "Chemical 1 — Add:": "இரசாயனம் 1 — சேர்க்கவும்:",
+    "Chemical 2 — Add:": "இரசாயனம் 2 — சேர்க்கவும்:",
+    "Sample Time": "மாதிரி நேரம்",
+    "Sample Quantity": "மாதிரி அளவு",
+    "Total Weight": "மொத்த எடை",
+    "Time taken to fill the sample (minutes)": "மாதிரியை நிரப்ப எடுக்கும் நேரம் (நிமிடங்கள்)",
+    "Weight filled during sample time": "மாதிரி நேரத்தில் நிரப்பப்பட்ட எடை",
+    "Total quantity that needs to be filled": "நிரப்பப்பட வேண்டிய மொத்த அளவு",
+    "Calculate Filling Time": "நிரப்பும் நேரத்தை கணக்கிடு",
+    "Estimated Filling Time": "மதிப்பிடப்பட்ட நிரப்பும் நேரம்",
+    "Total Minutes": "மொத்த நிமிடங்கள்",
+    "Total Qty (kg)": "மொத்த அளவு (கிலோ)",
+    "= Chem 1 qty (kg)": "= இரசாயனம் 1 அளவு (கிலோ)",
+    "= Ratio": "= விகிதம்",
+    "= Flow Rate (LPM, LPH)": "= ஓட்ட விகிதம் (LPM, LPH)",
+    "− Batch Wt. = Dilutant to Add": "− பேட்ச் எடை = சேர்க்க வேண்டிய பொருள்",
+    "= Total Time (min)": "= மொத்த நேரம் (நிமிடம்)",
+    "1 minute": "1 நிமிடம்", "5 minutes": "5 நிமிடங்கள்", "10 minutes": "10 நிமிடங்கள்", "30 minutes": "30 நிமிடங்கள்", "1 hour": "1 மணிநேரம்",
+    "10 sec": "10 நொடி", "15 sec": "15 நொடி", "20 sec": "20 நொடி", "25 sec": "25 நொடி", "30 sec": "30 நொடி",
+    "Please enter valid values": "சரியான மதிப்புகளை உள்ளிடவும்",
+    "Desired mixture must be between Chemical 1 and 2": "விரும்பிய கலவை இரசாயனம் 1 மற்றும் 2 க்கு இடையில் இருக்க வேண்டும்",
+    "Chemical percentages must be different": "இரசாயன சதவீதங்கள் வேறுபட்டிருக்க வேண்டும்",
+    "kg of Chemical 1": "கிலோ இரசாயனம் 1",
+    "kg of Chemical 2": "கிலோ இரசாயனம் 2",
+    "Only Chemical 1 needed": "இரசாயனம் 1 மட்டுமே தேவை",
+    "Only Chemical 2 needed": "இரசாயனம் 2 மட்டுமே தேவை",
+    "Less than a minute to complete filling.": "நிரப்புவதற்கு ஒரு நிமிடத்திற்கும் குறைவான நேரமே ஆகும்.",
+    "hour": "மணிநேரம்", "hours": "மணிநேரம்", "minute": "நிமிடம்", "minutes": "நிமிடங்கள்",
+    "It will take approximately": "இதற்கு சுமார்",
+    "and": "மற்றும்",
+    "to complete filling.": "நேரம் ஆகும்.",
+    "e.g. 25.00": "எ.கா. 25.00", "e.g. 10.00": "எ.கா. 10.00", "e.g. 29.50": "எ.கா. 29.50",
+    "e.g. 45": "எ.கா. 45", "e.g. 500": "எ.கா. 500", "e.g. 30": "எ.கா. 30",
+    "e.g. 100": "எ.கா. 100", "e.g. 1.05": "எ.கா. 1.05", "e.g. 60": "எ.கா. 60", "e.g. 20": "எ.கா. 20",
+    "e.g. 40": "எ.கா. 40", "e.g. 0.5": "எ.கா. 0.5", "e.g. 5": "எ.கா. 5",
+    "Batch Weight": "பேட்ச் எடை",
+    "Total Time (seconds)": "மொத்த நேரம் (நொடிகள்)"
+  }
+};
+
+let currentLang = 'en';
+let translationNodes = [];
+
+function setupTranslationNodes() {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  let node;
+  while ((node = walker.nextNode())) {
+    const text = node.nodeValue;
+    const trimmed = text.trim();
+    if (trimmed && translations['hi'][trimmed]) {
+      translationNodes.push({
+        node: node,
+        key: trimmed,
+        prefix: text.substring(0, text.indexOf(trimmed)),
+        suffix: text.substring(text.indexOf(trimmed) + trimmed.length)
+      });
+    }
+  }
+
+  document.querySelectorAll('input[placeholder]').forEach(input => {
+    const ph = input.getAttribute('placeholder');
+    if (translations['hi'][ph]) {
+      input.setAttribute('data-i18n-ph', ph);
+    }
+  });
+}
+
+function setLanguage(lang) {
+  currentLang = lang;
+  
+  if (translationNodes.length === 0) {
+    setupTranslationNodes();
+  }
+  
+  // Translate text nodes safely
+  translationNodes.forEach(item => {
+    if (translations[lang] && translations[lang][item.key]) {
+      item.node.nodeValue = item.prefix + translations[lang][item.key] + item.suffix;
+    } else if (lang === 'en') {
+      item.node.nodeValue = item.prefix + item.key + item.suffix;
+    }
+  });
+
+  // Translate placeholders
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.getAttribute('data-i18n-ph');
+    if (translations[lang] && translations[lang][key]) {
+      el.placeholder = translations[lang][key];
+    } else if (lang === 'en') {
+      el.placeholder = key;
+    }
+  });
+
+  // Update button active state
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+  
+  // Re-calculate the currently visible form to update dynamic text
+  const activeTab = document.querySelector('.formula-nav-btn.active');
+  if(activeTab) {
+      document.querySelectorAll('.btn-calculate').forEach(btn => {
+          if(!btn.disabled) btn.click();
+      });
+  }
+}
+
+function t(key) {
+  if (translations[currentLang] && translations[currentLang][key]) {
+    return translations[currentLang][key];
+  }
+  return key;
+}

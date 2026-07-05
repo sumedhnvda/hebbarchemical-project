@@ -360,12 +360,12 @@
     const timeStr = `${hh}h ${mm}m ${ss}s (${totalSec} sec)`;
 
     $('fr-result-ts').textContent  = formatTime(now);
-    $('fr-bd-qty').textContent     = qty.toFixed(2) + ' kg';
+    $('fr-bd-qty').textContent     = qty.toFixed(2) + ' ' + t('kg');
     $('fr-bd-time').textContent    = timeStr;
     $('fr-bd-sg').textContent      = sg.toFixed(3);
-    $('fr-bd-vol').textContent     = volumeL.toFixed(2) + ' L';
-    $('fr-bd-rate-min').textContent = flowRateMin.toFixed(2) + ' LPM';
-    $('fr-bd-rate-hr').textContent  = flowRateHr.toFixed(2) + ' LPH';
+    $('fr-bd-vol').textContent     = volumeL.toFixed(2) + ' ' + t('L');
+    $('fr-bd-rate-min').textContent = flowRateMin.toFixed(2) + ' ' + t('LPM');
+    $('fr-bd-rate-hr').textContent  = flowRateHr.toFixed(2) + ' ' + t('LPH');
 
     const card = $('fr-result');
     card.classList.remove('hidden');
@@ -428,16 +428,16 @@
     let p2Text = "0 kg";
 
     if (r1 === 0) {
-      p1Text = "Only Chemical 1 needed";
-      p2Text = "0 kg";
+      p1Text = t('Only Chemical 1 needed');
+      p2Text = "0 " + t('kg');
     } else if (r2 === 0) {
-      p1Text = "0 kg";
-      p2Text = "Only Chemical 2 needed";
+      p1Text = "0 " + t('kg');
+      p2Text = t('Only Chemical 2 needed');
     } else {
       const p1 = r1 / r2;
       const p2 = r2 / r1;
-      p1Text = `${p1.toFixed(2)} kg of Chemical 1`;
-      p2Text = `${p2.toFixed(2)} kg of Chemical 2`;
+      p1Text = `${p1.toFixed(2)} ${t('kg of Chemical 1')}`;
+      p2Text = `${p2.toFixed(2)} ${t('kg of Chemical 2')}`;
     }
 
     const now = new Date();
@@ -477,18 +477,18 @@
     if (isNaN(c2) || c2 < 0 || c2 > 100)   { pk.groups[1].classList.add('error'); err = true; }
     if (isNaN(mix) || mix < 0 || mix > 100) { pk.groups[2].classList.add('error'); err = true; }
     if (isNaN(qty) || qty <= 0)             { pk.groups[3].classList.add('error'); err = true; }
-    if (err) { showToast('Please enter valid values', true); return; }
+    if (err) { showToast(t('Please enter valid values'), true); return; }
 
     if ((mix > c1 && mix > c2) || (mix < c1 && mix < c2)) {
       pk.groups[2].classList.add('error');
-      showToast('Desired mixture must be between Chemical 1 and 2', true);
+      showToast(t('Desired mixture must be between Chemical 1 and 2'), true);
       return;
     }
 
     if (c1 === c2) {
       pk.groups[0].classList.add('error');
       pk.groups[1].classList.add('error');
-      showToast('Chemical percentages must be different', true);
+      showToast(t('Chemical percentages must be different'), true);
       return;
     }
 
@@ -500,9 +500,9 @@
 
     const now = new Date();
     $('pk-result-ts').textContent = formatTime(now);
-    $('pk-bd-qty').textContent   = qty.toFixed(2) + ' kg';
-    $('pk-res-p1').textContent   = p1.toFixed(2) + ' kg of Chemical 1';
-    $('pk-res-p2').textContent   = p2.toFixed(2) + ' kg of Chemical 2';
+    $('pk-bd-qty').textContent   = qty.toFixed(2) + ' ' + t('kg');
+    $('pk-res-p1').textContent   = p1.toFixed(2) + ' ' + t('kg of Chemical 1');
+    $('pk-res-p2').textContent   = p2.toFixed(2) + ' ' + t('kg of Chemical 2');
 
     const card = $('pk-result');
     card.classList.remove('hidden');
@@ -531,14 +531,14 @@
     return `${pad(h)}:${pad(m)}`;
   }
 
-  function secsToFriendly(totalSec) {
-    const h = Math.floor(totalSec / 3600);
-    const m = Math.round((totalSec % 3600) / 60);
-    if (h === 0 && m === 0) return 'Less than a minute to complete filling.';
+  function secsToFriendly(s) {
+    const h = Math.floor(s / 3600);
+    const m = Math.round((s % 3600) / 60);
+    if (h === 0 && m === 0) return t('Less than a minute to complete filling.');
     const parts = [];
-    if (h) parts.push(`${h} hour${h !== 1 ? 's' : ''}`);
-    if (m) parts.push(`${m} minute${m !== 1 ? 's' : ''}`);
-    return `It will take approximately ${parts.join(' and ')} to complete filling.`;
+    if (h) parts.push(`${h} ${t(h !== 1 ? 'hours' : 'hour')}`);
+    if (m) parts.push(`${m} ${t(m !== 1 ? 'minutes' : 'minute')}`);
+    return `${t('It will take approximately')} ${parts.join(' ' + t('and') + ' ')} ${t('to complete filling.')}`;
   }
 
   ft.btnCalc.addEventListener('click', () => {
