@@ -5,8 +5,8 @@
   "description": "Solid content and quality testing calculator for field executives",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#F0F5FA",
-  "theme_color": "#2563C3",
+  "background_color": "#FFFFFF",
+  "theme_color": "#4B5DA6",
   "orientation": "portrait",
   "icons": [
     {

@@ -66,6 +66,33 @@
     arrowRight.addEventListener('click', () => switchTab(1));
   }
 
+
+  // Swipe Gestures — attached to document so it captures the whole viewport
+  const SWIPE_THRESHOLD = 40;   // min horizontal distance px
+  const SWIPE_RATIO     = 1.3;  // must be more horizontal than vertical
+  const INTERACTIVE     = new Set(['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON', 'LABEL']);
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let swipeLocked = false;
+
+  document.addEventListener('touchstart', e => {
+    // Don't hijack touches on interactive elements
+    const tag = e.target.tagName;
+    swipeLocked = INTERACTIVE.has(tag);
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    if (swipeLocked) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) >= SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy) * SWIPE_RATIO) {
+      dx > 0 ? switchTab(-1) : switchTab(1);
+    }
+  }, { passive: true });
+
   const calcPanels = {
     'solid-content': $('calc-solid-content'),
     'dilution':      $('calc-dilution'),
@@ -73,6 +100,9 @@
     'blending':      $('calc-blending'),
     'packing':       $('calc-packing'),
     'filling-time':  $('calc-filling-time'),
+    'known-qty':     $('calc-known-qty'),
+    'mass-vol':      $('calc-mass-vol'),
+    'recipe-scale':  $('calc-recipe-scale'),
   };
 
   const navScroll = $('formula-nav');
@@ -434,8 +464,8 @@
       p1Text = "0 " + t('kg');
       p2Text = t('Only Chemical 2 needed');
     } else {
-      const p1 = r1 / r2;
-      const p2 = r2 / r1;
+      const p1 = r2 / r1;
+      const p2 = r1 / r2;
       p1Text = `${p1.toFixed(2)} ${t('kg of Chemical 1')}`;
       p2Text = `${p2.toFixed(2)} ${t('kg of Chemical 2')}`;
     }
@@ -501,8 +531,8 @@
     const now = new Date();
     $('pk-result-ts').textContent = formatTime(now);
     $('pk-bd-qty').textContent   = qty.toFixed(2) + ' ' + t('kg');
-    $('pk-res-p1').textContent   = p1.toFixed(2) + ' ' + t('kg of Chemical 1');
-    $('pk-res-p2').textContent   = p2.toFixed(2) + ' ' + t('kg of Chemical 2');
+    $('pk-res-p1').textContent   = `${t('For a')} ${qty} ${t('kg batch, add')} ${p1.toFixed(2)} ${t('kg of Chemical 1')}`;
+    $('pk-res-p2').textContent   = `${t('For a')} ${qty} ${t('kg batch, add')} ${p2.toFixed(2)} ${t('kg of Chemical 2')}`;
 
     const card = $('pk-result');
     card.classList.remove('hidden');
@@ -514,8 +544,9 @@
     resetForm(pk.inputs, pk.groups, pk.fvLabels, pk.btnCalc, 'pk-result');
   });
 
+  
   // =====================
-  // FORMULA 7: FILLING TIME
+  // FORMULA 6: FILLING TIME
   // =====================
   const ft = setupInputs(
     ['ft-input-st', 'ft-input-sq', 'ft-input-wt'],
@@ -570,10 +601,276 @@
     if (navigator.vibrate) navigator.vibrate(60);
   });
 
+  // =====================
+  // FORMULA 7: KNOWN QUANTITY
+  // =====================
+  const kq = setupInputs(
+    ['kq-input-c1', 'kq-input-c2', 'kq-input-mix', 'kq-input-qty'],
+    ['kq-group-c1', 'kq-group-c2', 'kq-group-mix', 'kq-group-qty'],
+    ['fv-kq-c1', 'fv-kq-c2', 'fv-kq-mix', 'fv-kq-qty'],
+    'kq-btn-calc'
+  );
+
+  const kqCheckInputs = () => {
+    const allFilled = kq.inputs.every(input => input.value.trim() !== '');
+    const isSelected = $('kq-type-c1').checked || $('kq-type-c2').checked;
+    kq.btnCalc.disabled = !(allFilled && isSelected);
+  };
+
+  kq.inputs.forEach(input => input.addEventListener('input', kqCheckInputs));
+  $('kq-type-c1').addEventListener('change', kqCheckInputs);
+  $('kq-type-c2').addEventListener('change', kqCheckInputs);
+
+
+  kq.btnCalc.addEventListener('click', () => {
+    const c1  = parseFloat(kq.inputs[0].value);
+    const c2  = parseFloat(kq.inputs[1].value);
+    const mix = parseFloat(kq.inputs[2].value);
+    const qty = parseFloat(kq.inputs[3].value);
+    const isC1 = $('kq-type-c1').checked;
+    const isC2 = $('kq-type-c2').checked;
+
+    let err = false;
+    if (isNaN(c1) || c1 < 0 || c1 > 100)   { kq.groups[0].classList.add('error'); err = true; }
+    if (isNaN(c2) || c2 < 0 || c2 > 100)   { kq.groups[1].classList.add('error'); err = true; }
+    if (isNaN(mix) || mix < 0 || mix > 100) { kq.groups[2].classList.add('error'); err = true; }
+    if (isNaN(qty) || qty <= 0)             { kq.groups[3].classList.add('error'); err = true; }
+    
+    if (!isC1 && !isC2) {
+      showToast(t('Please select Chemical 1 or Chemical 2'), true);
+      return;
+    }
+    if (err) { showToast(t('Please enter valid values'), true); return; }
+
+    if ((mix > c1 && mix > c2) || (mix < c1 && mix < c2)) {
+      kq.groups[2].classList.add('error');
+      showToast(t('Desired mixture must be between Chemical 1 and 2'), true);
+      return;
+    }
+    if (c1 === c2) {
+      kq.groups[0].classList.add('error');
+      kq.groups[1].classList.add('error');
+      showToast(t('Chemical percentages must be different'), true);
+      return;
+    }
+
+    const r1 = Math.abs(c2 - mix);
+    const r2 = Math.abs(c1 - mix);
+
+    let resultText = "";
+    if (isC1) {
+      const requiredC2 = qty * (r2 / r1);
+      resultText = `${t('Add')} ${requiredC2.toFixed(2)} ${t('kg of Chemical 2')}`;
+    } else {
+      const requiredC1 = qty * (r1 / r2);
+      resultText = `${t('Add')} ${requiredC1.toFixed(2)} ${t('kg of Chemical 1')}`;
+    }
+
+    const now = new Date();
+    $('kq-result-ts').textContent = formatTime(now);
+    $('kq-bd-c1').textContent = c1.toFixed(2) + ' %';
+    $('kq-bd-c2').textContent = c2.toFixed(2) + ' %';
+    $('kq-bd-mix').textContent = mix.toFixed(2) + ' %';
+    $('kq-bd-qty').textContent = qty.toFixed(2) + ' ' + t('kg') + ' (' + t(isC1 ? 'Chem 1' : 'Chem 2') + ')';
+    $('kq-res-text').textContent = resultText;
+
+    const card = $('kq-result');
+    card.classList.remove('hidden');
+    setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+    if (navigator.vibrate) navigator.vibrate(60);
+  });
+
+  $('kq-btn-reset').addEventListener('click', () => {
+    resetForm(kq.inputs, kq.groups, kq.fvLabels, kq.btnCalc, 'kq-result');
+    $('kq-type-c1').checked = false;
+    $('kq-type-c2').checked = false;
+  });
+
   $('ft-btn-reset').addEventListener('click', () => {
     resetForm(ft.inputs, ft.groups, ft.fvLabels, ft.btnCalc, 'ft-result');
     $('ft-result-hms').textContent = '00:00';
     $('ft-result-friendly').textContent = '';
+  });
+
+  // =====================
+  // FORMULA 8: MASS-VOLUME CONVERSION
+  // =====================
+  const mv = setupInputs(
+    ['mv-input-den', 'mv-input-val'],
+    ['mv-group-den', 'mv-group-val'],
+    ['fv-mv-den', 'fv-mv-val'],
+    'mv-btn-calc'
+  );
+
+  const mvCheckInputs = () => {
+    const allFilled = mv.inputs.every(input => input.value.trim() !== '');
+    const isSelected = $('mv-type-mass').checked || $('mv-type-vol').checked;
+    mv.btnCalc.disabled = !(allFilled && isSelected);
+  };
+  mv.inputs.forEach(input => input.addEventListener('input', mvCheckInputs));
+  $('mv-type-mass').addEventListener('change', () => {
+    $('mv-unit-val').textContent = 'kg';
+    mvCheckInputs();
+  });
+  $('mv-type-vol').addEventListener('change', () => {
+    $('mv-unit-val').textContent = 'L';
+    mvCheckInputs();
+  });
+
+  mv.btnCalc.addEventListener('click', () => {
+    const den = parseFloat(mv.inputs[0].value);
+    const val = parseFloat(mv.inputs[1].value);
+    const isMass = $('mv-type-mass').checked;
+
+    let err = false;
+    if (isNaN(den) || den <= 0) { mv.groups[0].classList.add('error'); err = true; }
+    if (isNaN(val) || val < 0)  { mv.groups[1].classList.add('error'); err = true; }
+    
+    if (!isMass && !$('mv-type-vol').checked) {
+      showToast(t('Please select Mass or Volume'), true);
+      return;
+    }
+    
+    if (err) { showToast(t('Please enter valid values'), true); return; }
+
+    let resultText = "";
+    if (isMass) {
+      // Volume = Mass / Density
+      const vol = val / den;
+      resultText = `Volume = ${vol.toFixed(2)} L`;
+    } else {
+      // Mass = Volume * Density
+      const mass = val * den;
+      resultText = `Mass = ${mass.toFixed(2)} kg`;
+    }
+
+    const now = new Date();
+    $('mv-result-ts').textContent = formatTime(now);
+    $('mv-bd-den').textContent = den.toFixed(2) + ' kg/L';
+    $('mv-bd-val').textContent = val.toFixed(2) + (isMass ? ' kg (Mass)' : ' L (Volume)');
+    $('mv-res-text').textContent = resultText;
+
+    const card = $('mv-result');
+    card.classList.remove('hidden');
+    setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+    if (navigator.vibrate) navigator.vibrate(60);
+  });
+
+  $('mv-btn-reset').addEventListener('click', () => {
+    resetForm(mv.inputs, mv.groups, mv.fvLabels, mv.btnCalc, 'mv-result');
+    $('mv-type-mass').checked = false;
+    $('mv-type-vol').checked = false;
+    $('mv-unit-val').textContent = '--';
+  });
+
+  // =====================
+  // FORMULA 9: RECIPE SCALING
+  // =====================
+  const rsInputCount  = $('rs-input-count');
+  const rsBtnGenerate = $('rs-btn-generate');
+  const rsTableWrap   = $('rs-table-wrap');
+  const rsRows        = $('rs-rows');
+  const rsBtnCalc     = $('rs-btn-calc');
+  const rsResult      = $('rs-result');
+  const rsResultRows  = $('rs-result-rows');
+  const rsResultInfo  = $('rs-result-info');
+  let rsIngredientCount = 0;
+
+  rsInputCount.addEventListener('input', () => {
+    const n = parseInt(rsInputCount.value);
+    rsBtnGenerate.disabled = !(n >= 2 && n <= 30);
+  });
+
+  rsBtnGenerate.addEventListener('click', () => {
+    const n = parseInt(rsInputCount.value);
+    if (isNaN(n) || n < 2 || n > 30) return;
+    rsIngredientCount = n;
+    rsRows.innerHTML = '';
+    rsResult.classList.add('hidden');
+    rsBtnCalc.disabled = true;
+    for (let i = 1; i <= n; i++) {
+      const row = document.createElement('div');
+      row.className = 'rs-row';
+      row.id = 'rs-row-' + i;
+      row.innerHTML =
+        '<span class="rs-num">' + i + '</span>' +
+        '<input type="number" id="rs-std-' + i + '" inputmode="decimal" placeholder="Std" step="0.01" min="0">' +
+        '<div class="rs-chk-wrap"><input type="checkbox" id="rs-chk-' + i + '"></div>' +
+        '<input type="number" id="rs-avl-' + i + '" inputmode="decimal" placeholder="Avl" step="0.01" min="0" disabled>';
+      rsRows.appendChild(row);
+      const stdInp = $('rs-std-' + i);
+      const avlInp = $('rs-avl-' + i);
+      const chk    = $('rs-chk-' + i);
+      chk.addEventListener('change', () => {
+        avlInp.disabled = !chk.checked;
+        if (!chk.checked) { avlInp.value = ''; }
+        rsCheckAllFilled();
+      });
+      stdInp.addEventListener('input', rsCheckAllFilled);
+      avlInp.addEventListener('input', rsCheckAllFilled);
+    }
+    rsTableWrap.classList.remove('hidden');
+    setTimeout(() => rsTableWrap.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  });
+
+  function rsCheckAllFilled() {
+    let ok = true;
+    for (let i = 1; i <= rsIngredientCount; i++) {
+      const s = $('rs-std-' + i);
+      const c = $('rs-chk-' + i);
+      const a = $('rs-avl-' + i);
+      if (!s || s.value.trim() === '') { ok = false; break; }
+      if (c && c.checked && (!a || a.value.trim() === '')) { ok = false; break; }
+    }
+    rsBtnCalc.disabled = !ok;
+  }
+
+  rsBtnCalc.addEventListener('click', () => {
+    const ings = [];
+    let hasError = false;
+    for (let i = 1; i <= rsIngredientCount; i++) {
+      const std = parseFloat($('rs-std-' + i).value);
+      const chk = $('rs-chk-' + i);
+      const isConstrained = chk && chk.checked;
+      const avlRaw = isConstrained ? parseFloat($('rs-avl-' + i).value) : Infinity;
+      $('rs-row-' + i).classList.remove('limiting');
+      if (isNaN(std) || std <= 0) { hasError = true; }
+      else if (isConstrained && (isNaN(avlRaw) || avlRaw < 0)) { hasError = true; }
+      else { ings.push({ serial: i, std, ratio: isConstrained ? (avlRaw / std) : Infinity }); }
+    }
+    if (hasError) { showToast(t('Please enter valid values'), true); return; }
+    const constrained = ings.filter(g => isFinite(g.ratio));
+    if (constrained.length === 0) { showToast('Please constrain at least one ingredient', true); return; }
+    const rMin = Math.min(...constrained.map(g => g.ratio));
+    const limitIdx = ings.findIndex(g => g.ratio === rMin);
+    $('rs-row-' + ings[limitIdx].serial).classList.add('limiting');
+    rsResultRows.innerHTML = '';
+    ings.forEach((ing, idx) => {
+      const revised = ing.std * rMin;
+      const isLim = idx === limitIdx;
+      const row = document.createElement('div');
+      row.className = 'rs-result-row' + (isLim ? ' limiting-result' : '');
+      row.innerHTML =
+        '<span>' + ing.serial + '</span>' +
+        '<span>' + ing.std.toFixed(2) + '</span>' +
+        '<span class="rs-revised">' + revised.toFixed(2) + '</span>';
+      rsResultRows.appendChild(row);
+    });
+    rsResultInfo.textContent = 'Scale: ' + (rMin * 100).toFixed(1) + '% — Limiting ingredient: #' + ings[limitIdx].serial;
+    $('rs-result-ts').textContent = formatTime(new Date());
+    rsResult.classList.remove('hidden');
+    setTimeout(() => rsResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+    if (navigator.vibrate) navigator.vibrate(60);
+  });
+
+  $('rs-btn-reset').addEventListener('click', () => {
+    rsInputCount.value = '';
+    rsRows.innerHTML = '';
+    rsTableWrap.classList.add('hidden');
+    rsResult.classList.add('hidden');
+    rsBtnGenerate.disabled = true;
+    rsBtnCalc.disabled = true;
+    rsIngredientCount = 0;
   });
 
   if ('serviceWorker' in navigator) {
