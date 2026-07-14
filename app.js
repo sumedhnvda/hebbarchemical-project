@@ -737,17 +737,17 @@
     if (isMass) {
       // Volume = Mass / Density
       const vol = val / den;
-      resultText = `Volume = ${vol.toFixed(2)} L`;
+      resultText = `${t('Volume')} = ${vol.toFixed(2)} ${t('L')}`;
     } else {
       // Mass = Volume * Density
       const mass = val * den;
-      resultText = `Mass = ${mass.toFixed(2)} kg`;
+      resultText = `${t('Mass')} = ${mass.toFixed(2)} ${t('kg')}`;
     }
 
     const now = new Date();
     $('mv-result-ts').textContent = formatTime(now);
-    $('mv-bd-den').textContent = den.toFixed(2) + ' kg/L';
-    $('mv-bd-val').textContent = val.toFixed(2) + (isMass ? ' kg (Mass)' : ' L (Volume)');
+    $('mv-bd-den').textContent = den.toFixed(2) + ' ' + t('kg/L');
+    $('mv-bd-val').textContent = val.toFixed(2) + (isMass ? ' ' + t('kg (Mass)') : ' ' + t('L (Volume)'));
     $('mv-res-text').textContent = resultText;
 
     const card = $('mv-result');
@@ -794,9 +794,9 @@
       row.id = 'rs-row-' + i;
       row.innerHTML =
         '<span class="rs-num">' + i + '</span>' +
-        '<input type="number" id="rs-std-' + i + '" inputmode="decimal" placeholder="Std" step="0.01" min="0">' +
+        '<input type="number" id="rs-std-' + i + '" inputmode="decimal" placeholder="' + t('Std') + '" step="0.01" min="0">' +
         '<div class="rs-chk-wrap"><input type="checkbox" id="rs-chk-' + i + '"></div>' +
-        '<input type="number" id="rs-avl-' + i + '" inputmode="decimal" placeholder="Avl" step="0.01" min="0" disabled>';
+        '<input type="number" id="rs-avl-' + i + '" inputmode="decimal" placeholder="' + t('Avl') + '" step="0.01" min="0" disabled>';
       rsRows.appendChild(row);
       const stdInp = $('rs-std-' + i);
       const avlInp = $('rs-avl-' + i);
@@ -840,7 +840,7 @@
     }
     if (hasError) { showToast(t('Please enter valid values'), true); return; }
     const constrained = ings.filter(g => isFinite(g.ratio));
-    if (constrained.length === 0) { showToast('Please constrain at least one ingredient', true); return; }
+    if (constrained.length === 0) { showToast(t('Please constrain at least one ingredient'), true); return; }
     const rMin = Math.min(...constrained.map(g => g.ratio));
     const limitIdx = ings.findIndex(g => g.ratio === rMin);
     $('rs-row-' + ings[limitIdx].serial).classList.add('limiting');
@@ -856,7 +856,7 @@
         '<span class="rs-revised">' + revised.toFixed(2) + '</span>';
       rsResultRows.appendChild(row);
     });
-    rsResultInfo.textContent = 'Scale: ' + (rMin * 100).toFixed(1) + '% — Limiting ingredient: #' + ings[limitIdx].serial;
+    rsResultInfo.textContent = t('Scale') + ': ' + (rMin * 100).toFixed(1) + '% — ' + t('Limiting ingredient') + ': #' + ings[limitIdx].serial;
     $('rs-result-ts').textContent = formatTime(new Date());
     rsResult.classList.remove('hidden');
     setTimeout(() => rsResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
