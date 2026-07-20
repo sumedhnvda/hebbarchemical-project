@@ -508,6 +508,13 @@ input[type="number"] { -moz-appearance: textfield; }
 }
 .rs-row:focus-within { border-color: var(--accent); }
 .rs-row.limiting     { border-color: var(--red); background: var(--red-bg); }
+.rs-row.rs-invalid   { border-color: var(--red); background: var(--red-bg); }
+.rs-row.rs-invalid input.rs-invalid-input {
+  border: 1.5px solid var(--red);
+  background: var(--red-bg);
+  color: var(--red);
+  font-weight: 700;
+}
 .rs-row .rs-num {
   text-align: center;
   font-size: 0.8rem;

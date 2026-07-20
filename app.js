@@ -531,8 +531,8 @@
     const now = new Date();
     $('pk-result-ts').textContent = formatTime(now);
     $('pk-bd-qty').textContent   = qty.toFixed(2) + ' ' + t('kg');
-    $('pk-res-p1').textContent   = `${t('For a')} ${qty} ${t('kg batch, add')} ${p1.toFixed(2)} ${t('kg of Chemical 1')}`;
-    $('pk-res-p2').textContent   = `${t('For a')} ${qty} ${t('kg batch, add')} ${p2.toFixed(2)} ${t('kg of Chemical 2')}`;
+    $('pk-res-p1').textContent   = `${t('For a')} ${qty} ${t('kg packing, add')} ${p1.toFixed(2)} ${t('kg of Chemical 1')}`;
+    $('pk-res-p2').textContent   = `${t('For a')} ${qty} ${t('kg packing, add')} ${p2.toFixed(2)} ${t('kg of Chemical 2')}`;
 
     const card = $('pk-result');
     card.classList.remove('hidden');
@@ -803,15 +803,49 @@
       const chk    = $('rs-chk-' + i);
       chk.addEventListener('change', () => {
         avlInp.disabled = !chk.checked;
-        if (!chk.checked) { avlInp.value = ''; }
+        if (!chk.checked) { avlInp.value = ''; rsMarkInvalid(i, false); }
         rsCheckAllFilled();
       });
-      stdInp.addEventListener('input', rsCheckAllFilled);
-      avlInp.addEventListener('input', rsCheckAllFilled);
+      stdInp.addEventListener('input', () => {
+        // Keep max in sync so browser enforces limit
+        const sv = parseFloat(stdInp.value);
+        avlInp.max = (!isNaN(sv) && sv > 0) ? sv : '';
+        // Re-validate avl against new std
+        const av = parseFloat(avlInp.value);
+        rsMarkInvalid(i, !isNaN(sv) && !isNaN(av) && av > sv);
+        rsCheckAllFilled();
+      });
+      avlInp.addEventListener('input', () => {
+        const s = parseFloat(stdInp.value);
+        const a = parseFloat(avlInp.value);
+        const invalid = !isNaN(s) && !isNaN(a) && a > s;
+        rsMarkInvalid(i, invalid);
+        if (invalid) showToast(t('Available cannot exceed Standard') + ' (' + s + ')', true);
+        rsCheckAllFilled();
+      });
+      avlInp.addEventListener('blur', () => {
+        // On blur clamp: if user typed too high, clear and warn
+        const s = parseFloat(stdInp.value);
+        const a = parseFloat(avlInp.value);
+        if (!isNaN(s) && !isNaN(a) && a > s) {
+          avlInp.value = '';
+          rsMarkInvalid(i, false);
+          showToast('Available cannot exceed Standard (' + s + ')', true);
+          rsCheckAllFilled();
+        }
+      });
     }
     rsTableWrap.classList.remove('hidden');
     setTimeout(() => rsTableWrap.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
   });
+
+  function rsMarkInvalid(i, invalid) {
+    const row = $('rs-row-' + i);
+    const avlInp = $('rs-avl-' + i);
+    if (!row) return;
+    row.classList.toggle('rs-invalid', invalid);
+    if (avlInp) avlInp.classList.toggle('rs-invalid-input', invalid);
+  }
 
   function rsCheckAllFilled() {
     let ok = true;
@@ -820,7 +854,12 @@
       const c = $('rs-chk-' + i);
       const a = $('rs-avl-' + i);
       if (!s || s.value.trim() === '') { ok = false; break; }
-      if (c && c.checked && (!a || a.value.trim() === '')) { ok = false; break; }
+      if (c && c.checked) {
+        if (!a || a.value.trim() === '') { ok = false; break; }
+        // Block if available > standard
+        const sv = parseFloat(s.value), av = parseFloat(a.value);
+        if (!isNaN(sv) && !isNaN(av) && av > sv) { ok = false; break; }
+      }
     }
     rsBtnCalc.disabled = !ok;
   }
@@ -828,6 +867,7 @@
   rsBtnCalc.addEventListener('click', () => {
     const ings = [];
     let hasError = false;
+    let hasInvalid = false;
     for (let i = 1; i <= rsIngredientCount; i++) {
       const std = parseFloat($('rs-std-' + i).value);
       const chk = $('rs-chk-' + i);
@@ -836,9 +876,11 @@
       $('rs-row-' + i).classList.remove('limiting');
       if (isNaN(std) || std <= 0) { hasError = true; }
       else if (isConstrained && (isNaN(avlRaw) || avlRaw < 0)) { hasError = true; }
+      else if (isConstrained && avlRaw > std) { rsMarkInvalid(i, true); hasInvalid = true; }
       else { ings.push({ serial: i, std, ratio: isConstrained ? (avlRaw / std) : Infinity }); }
     }
     if (hasError) { showToast(t('Please enter valid values'), true); return; }
+    if (hasInvalid) { showToast(t('Available cannot exceed Standard'), true); return; }
     const constrained = ings.filter(g => isFinite(g.ratio));
     if (constrained.length === 0) { showToast(t('Please constrain at least one ingredient'), true); return; }
     const rMin = Math.min(...constrained.map(g => g.ratio));
